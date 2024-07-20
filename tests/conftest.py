@@ -1,7 +1,7 @@
+from unittest.mock import Base
 import pytest
 import json
 from tests import app
-
 
 @pytest.fixture
 def client():
@@ -66,3 +66,20 @@ def h_principal():
     }
 
     return headers
+
+@pytest.fixture(scope='module')
+def test_db():
+    # Create an in-memory SQLite database
+    engine = create_engine('sqlite:///:memory:')
+    Base.metadata.create_all(engine)
+    
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    
+    # Provide the session to the tests
+    yield session
+    
+    session.close()
+
+    # Drop all tables after tests are done
+    Base.metadata.drop_all(engine)

@@ -1,7 +1,6 @@
 from core import db
 from core.libs import helpers
 
-
 class Student(db.Model):
     __tablename__ = 'students'
     id = db.Column(db.Integer, db.Sequence('students_id_seq'), primary_key=True)

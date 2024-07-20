@@ -9,9 +9,12 @@ set -e
 # Run required migrations
 export FLASK_APP=core/server.py
 
-# flask db init -d core/migrations/
-# flask db migrate -m "Initial migration." -d core/migrations/
-# flask db upgrade -d core/migrations/
+# Only run migration commands if needed
+if [ ! -d "core/migrations/versions" ]; then
+   flask db init -d core/migrations/
+fi
+flask db migrate -m "Initial migration." -d core/migrations/
+flask db upgrade -d core/migrations/
 
-# Run server
-gunicorn -c gunicorn_config.py core.server:app
+# Run server with Waitress
+waitress-serve --host=127.0.0.1 --port=8080 core.server:app

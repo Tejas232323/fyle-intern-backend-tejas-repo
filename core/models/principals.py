@@ -1,7 +1,6 @@
 from core import db
 from core.libs import helpers
 
-
 class Principal(db.Model):
     __tablename__ = 'principals'
     id = db.Column(db.Integer, db.Sequence('principals_id_seq'), primary_key=True)
